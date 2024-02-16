@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_info_title1s",
+  "info": {
+    "displayName": "title1"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "value": {
+      "type": "text"
+    }
+  }
+}

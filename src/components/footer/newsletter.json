@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_footer_newsletters",
+  "info": {
+    "displayName": "newsletter",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "button": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "user_info": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::user-info.user-info"
+    }
+  }
+}

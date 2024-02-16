@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_color_colours",
+  "info": {
+    "displayName": "Colour",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "color_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "colorname": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_wishlist_wishlists",
+  "info": {
+    "displayName": "wishlist",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    }
+  }
+}

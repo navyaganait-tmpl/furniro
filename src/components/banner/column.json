@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_banner_columns",
+  "info": {
+    "displayName": "column"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "richtext"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "desc": {
+      "type": "string"
+    }
+  }
+}

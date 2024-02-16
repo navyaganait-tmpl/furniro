@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_info_additional_infos",
+  "info": {
+    "displayName": "additional_info",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "general": {
+      "displayName": "title1",
+      "type": "component",
+      "repeatable": true,
+      "component": "info.title1"
+    },
+    "product": {
+      "type": "component",
+      "repeatable": true,
+      "component": "info.title1"
+    },
+    "dimensions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "info.title1"
+    },
+    "warranty": {
+      "type": "component",
+      "repeatable": true,
+      "component": "info.title1"
+    }
+  }
+}

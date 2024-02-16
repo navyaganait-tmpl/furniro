@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_footer_furniros",
+  "info": {
+    "displayName": "Furniro"
+  },
+  "options": {},
+  "attributes": {
+    "address": {
+      "type": "text"
+    }
+  }
+}

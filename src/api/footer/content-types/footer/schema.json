@@ -1,0 +1,39 @@
+{
+  "kind": "singleType",
+  "collectionName": "footers",
+  "info": {
+    "singularName": "footer",
+    "pluralName": "footers",
+    "displayName": "footer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "furniro": {
+      "displayName": "Furniro",
+      "type": "component",
+      "repeatable": true,
+      "component": "footer.furniro"
+    },
+    "links": {
+      "displayName": "link",
+      "type": "component",
+      "repeatable": true,
+      "component": "footer.link"
+    },
+    "Help": {
+      "type": "component",
+      "repeatable": true,
+      "component": "footer.link"
+    },
+    "newsletter": {
+      "displayName": "newsletter",
+      "type": "component",
+      "repeatable": false,
+      "component": "footer.newsletter"
+    }
+  }
+}

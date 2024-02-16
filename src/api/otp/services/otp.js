@@ -1,10 +1,9 @@
-
 'use strict';
 
 /**
- * audit-log service
+ * otp service
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService('api::audit-log.audit-log');
+module.exports = createCoreService('api::otp.otp');

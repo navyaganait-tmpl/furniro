@@ -4,7 +4,8 @@
   "info": {
     "singularName": "user-info",
     "pluralName": "user-infos",
-    "displayName": "User info"
+    "displayName": "User info",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -25,6 +26,27 @@
     "confirm_password": {
       "type": "password",
       "required": true
+    },
+    "otps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::otp.otp",
+      "mappedBy": "user_info"
+    },
+    "isSubscribed": {
+      "type": "boolean"
+    },
+    "wishlist": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "user_info"
+    },
+    "carts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::cart.cart",
+      "mappedBy": "user_infos"
     }
   }
 }

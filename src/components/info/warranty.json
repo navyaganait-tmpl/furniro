@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_info_warranties",
+  "info": {
+    "displayName": "warranty"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    }
+  }
+}

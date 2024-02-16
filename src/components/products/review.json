@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_products_reviews",
+  "info": {
+    "displayName": "review"
+  },
+  "options": {},
+  "attributes": {
+    "stars": {
+      "type": "integer"
+    },
+    "text": {
+      "type": "text"
+    }
+  }
+}

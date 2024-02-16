@@ -1,0 +1,36 @@
+{
+  "kind": "singleType",
+  "collectionName": "banners",
+  "info": {
+    "singularName": "banner",
+    "pluralName": "banners",
+    "displayName": "Banner"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "column1": {
+      "displayName": "column",
+      "type": "component",
+      "repeatable": false,
+      "component": "banner.column"
+    },
+    "column2": {
+      "type": "component",
+      "repeatable": false,
+      "component": "banner.column"
+    },
+    "column3": {
+      "type": "component",
+      "repeatable": false,
+      "component": "banner.column"
+    },
+    "column4": {
+      "type": "component",
+      "repeatable": false,
+      "component": "banner.column"
+    }
+  }
+}

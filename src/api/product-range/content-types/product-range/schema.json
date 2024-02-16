@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_ranges",
+  "info": {
+    "singularName": "product-range",
+    "pluralName": "product-ranges",
+    "displayName": "Product-range"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "inversedBy": "product_ranges"
+    }
+  }
+}

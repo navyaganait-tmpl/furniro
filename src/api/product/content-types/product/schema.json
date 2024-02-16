@@ -1,0 +1,96 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Product",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "shortDesc": {
+      "type": "text"
+    },
+    "price": {
+      "type": "biginteger"
+    },
+    "discount": {
+      "type": "biginteger"
+    },
+    "longDesc": {
+      "type": "text"
+    },
+    "color": {
+      "displayName": "Colour",
+      "type": "component",
+      "repeatable": true,
+      "component": "color.colour"
+    },
+    "Additional_info": {
+      "displayName": "additional_info",
+      "type": "component",
+      "repeatable": false,
+      "component": "info.additional-info"
+    },
+    "SKU": {
+      "type": "string"
+    },
+    "arrivalDate": {
+      "type": "date"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "review": {
+      "displayName": "review",
+      "type": "component",
+      "repeatable": true,
+      "component": "products.review"
+    },
+    "product_ranges": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product-range.product-range",
+      "mappedBy": "products"
+    },
+    "products_categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::products-category.products-category",
+      "mappedBy": "products"
+    },
+    "size": {
+      "displayName": "size",
+      "type": "component",
+      "repeatable": true,
+      "component": "size.size"
+    },
+    "user_info": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::user-info.user-info",
+      "inversedBy": "wishlist"
+    },
+    "carts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::cart.cart",
+      "mappedBy": "products"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_color_colors",
+  "info": {
+    "displayName": "Color",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "color": {
+      "type": "string"
+    }
+  }
+}
