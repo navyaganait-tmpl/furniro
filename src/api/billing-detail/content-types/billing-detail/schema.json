@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "billing_details",
+  "info": {
+    "singularName": "billing-detail",
+    "pluralName": "billing-details",
+    "displayName": "Billing Detail"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "streetAddress": {
+      "type": "text"
+    },
+    "town": {
+      "type": "string"
+    },
+    "province": {
+      "type": "string"
+    },
+    "zipCode": {
+      "type": "biginteger"
+    },
+    "phone": {
+      "type": "biginteger"
+    },
+    "email": {
+      "type": "email"
+    },
+    "additionalInfo": {
+      "type": "text"
+    },
+    "transactions": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::transaction.transaction",
+      "mappedBy": "billing_details"
+    }
+  }
+}

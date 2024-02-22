@@ -4,7 +4,8 @@
  * otp controller
  */
 
-const nodemailer = require('nodemailer'); 
+// const nodemailer = require('nodemailer'); 
+const sendConfirmationEmail = require('../../email');
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::otp.otp', ({ strapi }) => ({
@@ -41,7 +42,10 @@ module.exports = createCoreController('api::otp.otp', ({ strapi }) => ({
             });
 
             // Send the OTP to the user's email
-            await sendOTPByEmail(ctx.request.body.email, newOTP); 
+            const subject= 'Your OTP'; 
+            const text= `Your OTP is: ${newOTP}`;
+            await sendConfirmationEmail(ctx.request.body.email, subject, text);
+             
 
         
             return {
@@ -71,7 +75,7 @@ module.exports = createCoreController('api::otp.otp', ({ strapi }) => ({
                 populate: ['user_info'],
             });
 
-            console.log("otp", otpEntry);
+            
             // Check if OTP is not found or  expired
             if (!otpEntry || otpEntry.expiryDate < new Date()) {
                 return ctx.response.badRequest('Invalid or expired OTP');
@@ -99,7 +103,7 @@ module.exports = createCoreController('api::otp.otp', ({ strapi }) => ({
 
             }
             );
-            // console.log("deleteUser", deleteUser);
+            
             // Send the response
             return {
                 message: 'Password reset successfully',

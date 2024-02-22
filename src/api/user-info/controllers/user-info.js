@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const axios = require('axios');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
+// const sendConfirmationEmail = require('../../email');
 
 module.exports = createCoreController('api::user-info.user-info', ({ strapi }) => ({
 

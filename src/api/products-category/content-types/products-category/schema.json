@@ -19,6 +19,12 @@
       "relation": "manyToMany",
       "target": "api::product.product",
       "inversedBy": "products_categories"
+    },
+    "coupons": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::coupon.coupon",
+      "mappedBy": "products_categories"
     }
   }
 }

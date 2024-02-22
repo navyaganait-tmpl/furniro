@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "coupons",
+  "info": {
+    "singularName": "coupon",
+    "pluralName": "coupons",
+    "displayName": "Coupon"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "couponCode": {
+      "type": "string"
+    },
+    "discountType": {
+      "type": "enumeration",
+      "enum": [
+        "Percentage",
+        "Fixed"
+      ]
+    },
+    "discountValue": {
+      "type": "biginteger"
+    },
+    "minimumPurchaseAmount": {
+      "type": "biginteger"
+    },
+    "expirationDate": {
+      "type": "date"
+    },
+    "maxUsageLimit": {
+      "type": "biginteger"
+    },
+    "usageCount": {
+      "type": "biginteger"
+    },
+    "maximumDiscountLimit": {
+      "type": "biginteger"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "startDate": {
+      "type": "date"
+    },
+    "products_categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::products-category.products-category",
+      "inversedBy": "coupons"
+    }
+  }
+}

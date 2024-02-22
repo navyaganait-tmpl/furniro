@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transactions",
+  "info": {
+    "singularName": "transaction",
+    "pluralName": "transactions",
+    "displayName": "Transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "orderId": {
+      "type": "string"
+    },
+    "paymentId": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "datetime"
+    },
+    "paymentMethod": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "biginteger"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "receipt": {
+      "type": "string"
+    },
+    "billing_details": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::billing-detail.billing-detail",
+      "inversedBy": "transactions"
+    },
+    "user": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "amountRefunded": {
+      "type": "biginteger"
+    },
+    "refundStatus": {
+      "type": "string"
+    },
+    "refundId": {
+      "type": "string"
+    }
+  }
+}
