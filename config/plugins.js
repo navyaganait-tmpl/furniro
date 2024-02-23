@@ -1,6 +1,16 @@
 module.exports = ({ env }) => {
     return {
-
+        upload: {
+            config: {
+              provider: '@strapi-community/strapi-provider-upload-google-cloud-storage',
+              providerOptions: {
+                bucketName: env('furniro-2'),
+                publicFiles: true,
+                uniform: false,
+                basePath: '',
+              },
+            },
+          },
         redis: {
             enabled: true,
             config: {
