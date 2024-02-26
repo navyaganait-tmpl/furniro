@@ -30,39 +30,54 @@ fs.createReadStream('product - Sheet1.csv')
         if (data.price) {
             data.price = parseFloat(data.price.replace(/,/g, ''));
         }
-        results.push(data);
+        results.push(data)
     })
     .on('end', async () => {
         console.log(results);
 
+
+        // myHeaders.append("Content-Type", "application/json");
+
+
+        // const raw = JSON.stringify({
+        //     "data": results
+        // });
+
+        // let requestOptions = {
+        //     method: "POST",
+        //     headers: myHeaders,
+        //     body: raw,
+        //     redirect: "follow"
+        // };
+
+
         for (let i = 0; i < results.length; i++) {
             let data = results[i];
-            let productSKU = data.SKU; // Assuming 'SKU' is the column containing the SKU
 
-            // Fetch existing product data
-            let response = await fetch(`https://furniro-qpmzl3qe5a-uc.a.run.app/api/products?SKU=${productSKU}`);
-            let existingProduct = await response.json();
+            let raw = JSON.stringify({
 
-            if (existingProduct.length > 0) {
-                // Merge existing data with new data
-                let updatedData = { ...existingProduct[0], ...data };
+                data
 
-                let raw = JSON.stringify({
-                    "data": updatedData
-                });
-
-                console.log(raw, "RAW");
-                let updateResponse = await fetch(`https://furniro-qpmzl3qe5a-uc.a.run.app/api/products/${existingProduct[0].id}`, {
-                    "method": "PUT", // Use PUT method to update
-                    "headers": { "Content-Type": "application/json" },
-                    "body": raw,
-                    "redirect": "follow"
-                });
-
-                let result = await updateResponse.text();
-                console.log(result);
-            } else {
-                console.log(`Product with SKU ${productSKU} not found.`);
             }
+            );
+
+
+
+
+            console.log(raw, "RAW");
+            let response = fetch("https://furniro-qpmzl3qe5a-uc.a.run.app/api/products?populate[color]=*", {
+                "method": "POST",
+                // @ts-ignore
+                "headers": { "Content-Type": "application/json" },
+                "body": raw,
+                "redirect": "follow"
+            })
+                .then((response) => response.text())
+                .then((result) => console.log(result))
+                .catch((error) => console.error(error));
         }
+
+
+
+
     });
