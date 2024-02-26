@@ -11,7 +11,6 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@strapi-community/strapi-provider-upload-google-cloud-storage": "^4.10.5",
     "@strapi/plugin-i18n": "4.11.1",
     "@strapi/plugin-users-permissions": "4.11.1",
     "@strapi/strapi": "4.11.1",
