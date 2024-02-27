@@ -6,7 +6,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/furniro-415112/furniro']
 # Deploy container image to Cloud Run
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
   entrypoint: gcloud
   args: ['run', 'deploy', 'furniro', '--image', 'gcr.io/furniro-415112/furniro', '--region', 'us-central1']
 images:
