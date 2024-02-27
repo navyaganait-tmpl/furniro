@@ -1,2 +1,13 @@
-runtime: nodejs14
-env: flex
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/furniro-415112/furniro', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/furniro-415112/furniro']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'furniro', '--image', 'gcr.io/furniro-415112/furniro', '--region', 'REGION']
+images:
+- gcr.io/furniro-415112/furniro
