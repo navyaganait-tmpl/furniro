@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the Strapi application (if needed)
-# RUN npm run build
+RUN npm run build
 
 # Expose the port that Strapi will run on
 EXPOSE 1337
