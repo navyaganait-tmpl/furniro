@@ -8,6 +8,6 @@ steps:
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', 'furniro', '--image', 'gcr.io/furniro-415112/furniro', '--region', 'REGION']
+  args: ['run', 'deploy', 'furniro', '--image', 'gcr.io/furniro-415112/furniro', '--region', 'us-central1']
 images:
 - gcr.io/furniro-415112/furniro
