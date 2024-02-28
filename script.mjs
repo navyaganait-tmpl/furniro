@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 
 const results = [];
 
-fs.createReadStream('product - Sheet1.csv')
+fs.createReadStream('Untitled spreadsheet - Sheet1.csv')
     .pipe(csv())
     .on('data', (data) => {
         if (data.products_categories) {
@@ -60,17 +60,18 @@ fs.createReadStream('product - Sheet1.csv')
 
             }
             );
+                 
 
 
-
-
+            // let apilink = 'http://localhost:1337'
+            let apilink = 'https://furniro-qpmzl3qe5a-uc.a.run.app'
             console.log(raw, "RAW");
-            let response = fetch("https://furniro-qpmzl3qe5a-uc.a.run.app/api/products?populate[color]=*", {
+            let response = fetch(`${apilink}/api/products?populate[0]=product_ranges`, {
                 "method": "POST",
                 // @ts-ignore
                 "headers": { "Content-Type": "application/json" },
                 "body": raw,
-                "redirect": "follow"
+
             })
                 .then((response) => response.text())
                 .then((result) => console.log(result))
