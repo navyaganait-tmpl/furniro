@@ -30,9 +30,7 @@
     "nodemailer": "^6.9.9",
     "pg": "8.8.0",
     "razorpay": "^2.9.2",
-    "strapi-plugin-redis": "^1.1.0",
     "strapi-plugin-rest-cache": "^4.2.8",
-    "strapi-provider-rest-cache-redis": "^4.2.8",
     "strapi-provider-upload-google-cloud-storage": "^4.0.0"
   },
   "author": {
