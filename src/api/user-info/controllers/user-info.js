@@ -30,9 +30,9 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
             message: 'Email is already taken',
           });
         }
-
-        const admin = await strapi.query("plugins:users-permissions.user").findOne({ where: { id: 1 } });
-
+        console.log("chech1")
+        const admin = await strapi.query("plugin::users-permissions.user").findOne({ where: { id: 1 } });
+        console.log("chech2")
         const user = await this.createUser(ctx.request.body.username, ctx.request.body.email, ctx.request.body.password);
 
 

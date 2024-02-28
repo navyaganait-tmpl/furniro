@@ -2,36 +2,36 @@ module.exports = ({ env }) => {
     return {
         upload: {
             config: {
-              provider: 'cloudinary',
-              providerOptions: {
-                cloud_name: env('CLOUDINARY_NAME'),
-                api_key: env('CLOUDINARY_KEY'),
-                api_secret: env('CLOUDINARY_SECRET'),
-              },
-              actionOptions: {
-                upload: {},
-                uploadStream: {},
-                delete: {},
-              },
-            },
-          },
-        redis: {
-            enabled: true,
-            config: {
-                connections: {
-                    default: {
-                        connection: {
-                            host: '127.0.0.1',
-                            port: 6379,
-                            db: 0,
-                        },
-                        settings: {
-                            debug: true,
-                        },
-                    },
+                provider: 'cloudinary',
+                providerOptions: {
+                    cloud_name: env('CLOUDINARY_NAME'),
+                    api_key: env('CLOUDINARY_KEY'),
+                    api_secret: env('CLOUDINARY_SECRET'),
+                },
+                actionOptions: {
+                    upload: {},
+                    uploadStream: {},
+                    delete: {},
                 },
             },
         },
+        // redis: {
+        //     enabled: true,
+        //     config: {
+        //         connections: {
+        //             default: {
+        //                 connection: {
+        //                     host: '127.0.0.1',
+        //                     port: 6379,
+        //                     db: 0,
+        //                 },
+        //                 settings: {
+        //                     debug: true,
+        //                 },
+        //             },
+        //         },
+        //     },
+        // },
         "rest-cache": {
             enabled: true,
             config: {

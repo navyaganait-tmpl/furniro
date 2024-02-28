@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 
 const results = [];
 
-fs.createReadStream('Untitled spreadsheet - Sheet1.csv')
+fs.createReadStream('product - Sheet1.csv')
     .pipe(csv())
     .on('data', (data) => {
         if (data.products_categories) {
