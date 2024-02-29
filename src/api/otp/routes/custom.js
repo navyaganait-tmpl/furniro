@@ -9,15 +9,7 @@ module.exports = {
           middlewares: [],
         },
       },
-      {
-        method: "POST",
-        path: "/resetPassword",
-        handler: "otp.resetPassword",
-        config: {
-          policies: [],
-          middlewares: [],
-        },
-      },
+      
     ],
     
   };

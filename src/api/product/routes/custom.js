@@ -2,7 +2,7 @@ module.exports = {
     routes: [
         {
             method: "GET",
-            path: "/products/:searchvalue",
+            path: "/searchProducts/:searchvalue",
             handler: "product.searchProducts",
             config: {
                 policies: [],
@@ -13,6 +13,14 @@ module.exports = {
             method: "POST",
             path: "/addToWishlist",
             handler: "product.addToWishlist",
+            config: {
+                auth: false
+            }
+        },
+        {
+            method: "GET",
+            path: "/wishlistItems",
+            handler: "product.wishlistItems",
             config: {
                 auth: false
             }

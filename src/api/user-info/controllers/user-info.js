@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const axios = require('axios');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
+const sendConfirmationEmail = require('../../email');
 // const sendConfirmationEmail = require('../../email');
 
 module.exports = createCoreController('api::user-info.user-info', ({ strapi }) => ({
@@ -12,7 +13,7 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
   async signup(ctx) {
     try {
       if (ctx.request.body.email) {
-       
+
         if (ctx.request.body.password !== ctx.request.body.confirmPassword) {
           return this.returnMessage(ctx, null, {
             status: '400',
@@ -20,9 +21,11 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
             message: 'Passwords do not match',
           });
         }
+        console.log("check1");
 
         const existingUser = await this.findUserByEmail(ctx.request.body.email);
 
+        console.log("check2");
         if (existingUser) {
           return this.returnMessage(ctx, null, {
             status: '409',
@@ -30,26 +33,33 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
             message: 'Email is already taken',
           });
         }
-        console.log("chech1")
-        const admin = await strapi.query("plugin::users-permissions.user").findOne({ where: { id: 1 } });
-        console.log("chech2")
+
         const user = await this.createUser(ctx.request.body.username, ctx.request.body.email, ctx.request.body.password);
 
+        // Generate a new OTP
+        const newOTP = Math.floor(100000 + Math.random() * 900000);
 
-        // const jwtToken = jwt.sign({userId:user.id}, process.env.ADMIN_JWT_SECRET, { expiresIn: '1h' });
-        const jwtToken = strapi.plugins['users-permissions'].services.jwt.issue({
-          adminId: admin.id,
-          userId: user.id
+        // Save the new OTP in the otp table
+        const createdOTP = await strapi.query('api::otp.otp').create({
+          data: {
+            OTP: newOTP,
+            email: ctx.request.body.email,
+          }
         });
-        this.setRememberMeCookie(ctx, jwtToken, ctx.request.body.remember);
 
-        console.log("jwtToken", jwtToken);
+        // Send the OTP to the user's email
+        const subject = 'Your OTP';
+        const text = `Your signup OTP is: ${newOTP}`;
+        await sendConfirmationEmail(ctx.request.body.email, subject, text);
 
-        return this.returnMessage(ctx, {
-          jwtToken,
-          user,
-          message: 'User registered successfully',
-        });
+
+
+        return {
+          message: 'Check your email for conformation',
+          // otp: createdOTP,
+        };
+
+
       } else if (ctx.request.body.googleAccessToken) {
         const user = await this.signupWithGoogle(ctx, ctx.request.body.googleAccessToken);
         return this.returnMessage(ctx, {
@@ -72,6 +82,148 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
     } catch (error) {
       console.error('Error during signup:', error);
       return ctx.badRequest('Signup failed');
+    }
+  },
+
+  async otp(ctx) {
+    try {
+      if(ctx.request.query.page=='signupVerify')
+      {if (!ctx.request.body.otp || !ctx.request.body.email) {
+        return ctx.response.badRequest('Enter valid credentials');
+      }
+      // Find the OTP in the database
+      const otpEntry = await strapi.query('api::otp.otp').findOne({
+        where: {
+          $and:
+            [{ OTP: ctx.request.body.otp },
+            { email: ctx.request.body.email },]
+        },
+
+      });
+
+      if (!otpEntry) {
+        return ctx.response.badRequest('Invalid OTP');
+      }
+      // Calculate the expiry date (15 minutes after creation)
+      const createdAt = new Date(otpEntry.createdAt);
+
+      const expiryDate = new Date(createdAt.getTime() + 15 * 60 * 1000);
+
+      // Check if OTP is not found or  expired
+
+
+      if (expiryDate < new Date()) {
+        return ctx.response.badRequest('expired OTP');
+      }
+
+      const admin = await strapi.query("plugin::users-permissions.user").findOne({ where: { id: 1 } });
+
+      // const user = await this.createUser(ctx.request.body.username, ctx.request.body.email, ctx.request.body.password);
+      const user = await strapi.query("api::user-info.user-info").update({
+        where: {
+          email: ctx.request.body.email,
+        }, data: {
+          registered: true,
+        }
+      })
+
+      // const jwtToken = jwt.sign({userId:user.id}, process.env.ADMIN_JWT_SECRET, { expiresIn: '1h' });
+      const jwtToken = strapi.plugins['users-permissions'].services.jwt.issue({
+        adminId: admin.id,
+        userId: user.id
+      });
+      this.setRememberMeCookie(ctx, jwtToken, ctx.request.body.remember);
+
+
+      let otpsToDelete = await strapi.query('api::otp.otp').findMany({
+        where: { email: ctx.request.body.email }
+      });
+
+      const otpIdsToDelete = otpsToDelete.map(otp => otp.id);
+
+      // Invalidate the OTP
+      let deleteUser = await strapi.query('api::otp.otp').deleteMany({
+        where:
+          { id: otpIdsToDelete }
+
+      }
+      );
+
+      return this.returnMessage(ctx, {
+        jwtToken,
+        user,
+        message: 'User registered successfully',
+      });}
+
+      if(ctx.request.query.page=='resetPassword'){
+        if (!ctx.request.body.otp) {
+          return ctx.response.badRequest('Invalid OTP');
+      }
+      if (!ctx.request.body.email||!ctx.request.body.password) {
+          return ctx.response.badRequest('Invalid credentials');
+      }
+
+
+
+      // Find the OTP in the database
+      const otpEntry = await strapi.query('api::otp.otp').findOne({
+          where: {
+            $and:
+              [{ OTP: ctx.request.body.otp },
+              { email: ctx.request.body.email },]
+          },
+          populate:['user_info'],
+      })
+      if (!otpEntry) {
+          return ctx.response.badRequest('Invalid OTP');
+      }
+
+      const createdAt = new Date(otpEntry.createdAt);
+
+      const expiryDate = new Date(createdAt.getTime() + 15 * 60 * 1000);
+      
+                 
+
+      if (expiryDate < new Date()) {
+          return ctx.response.badRequest('expired OTP');
+      }
+
+      // Update the user's password with the new password
+      const user = await strapi.query('api::user-info.user-info').update({
+          where:
+              { id: otpEntry.user_info.id },
+          data:
+              { password: ctx.request.body.password }
+      }
+      );
+      console.log(user);
+
+      let otpsToDelete = await strapi.query('api::otp.otp').findMany({
+          where: { user_info: user.id }
+      });
+
+      const otpIdsToDelete = otpsToDelete.map(otp => otp.id);
+
+      // Invalidate the OTP
+      let deleteUser = await strapi.query('api::otp.otp').deleteMany({
+          where:
+              { id: otpIdsToDelete }
+
+      }
+      );
+      
+      // Send the response
+      return {
+          message: 'Password reset successfully',
+      };
+      }
+
+      else{
+        return ctx.badRequest('Page doesnt exixt');
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+      return ctx.badRequest('Signup falied');
     }
   },
 
@@ -104,7 +256,7 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
           id: admin.id,
           userId: user.id
         });
-        
+
         this.setRememberMeCookie(ctx, jwtToken, ctx.request.body.remember);
 
         return this.returnMessage(ctx, {
@@ -140,7 +292,10 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
   async findUserByEmail(email) {
     return await strapi.query('api::user-info.user-info').findOne({
       where: {
-        email: email,
+        $and: [{ email: email },
+        {
+          registered: true
+        }]
       },
     });
   },
@@ -169,29 +324,24 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
 
   async signupWithGoogle(ctx, accessToken) {
     try {
-      // console.log(accessToken);
+
       const getDecodedOAuthJwtGoogle = async (token) => {
         try {
           const client = new OAuth2Client(process.env.CLIENT_ID_GOOGLE);
-          // console.log(token, "check1");
-          // console.log(process.env.CLIENT_ID_GOOGLE);
+
           const ticket = await client.verifyIdToken({
             idToken: token,
             audience: process.env.CLIENT_ID_GOOGLE,
           });
-          // console.log(ticket, "test");
-          // console.log('Decoded Token:', ticket.getPayload());
+
           return ticket;
         } catch (error) {
           return { status: 500, data: error };
         }
       };
-      // console.log(accessToken, "check1");
+
 
       const decodedToken = await getDecodedOAuthJwtGoogle(accessToken);
-      // console.log(decodedToken, "check2");
-
-      // console.log("payload", decodedToken.payload);
 
       if (!decodedToken || !decodedToken.payload || decodedToken.payload.aud !== process.env.AUTHORIZED_PARTY) {
         console.error('Google Access Token does not contain a valid payload:', decodedToken);
@@ -238,7 +388,7 @@ module.exports = createCoreController('api::user-info.user-info', ({ strapi }) =
         return existingUser;
       }
 
-      return await this.createUser(userData.name, userData.email, ''); 
+      return await this.createUser(userData.name, userData.email, '');
     } catch (error) {
       console.error('Error during Facebook signup:', error);
       throw error;

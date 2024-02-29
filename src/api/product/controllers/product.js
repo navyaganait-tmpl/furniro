@@ -17,12 +17,12 @@ module.exports = createCoreController('api::product.product', ({ strapi }) => ({
                     $or: [
                         { name: searchValue },
                         { longDesc: searchValue },
-                        { products_categories:{
-                            title: searchValue
-                        }}
+                        // { products_categories:{
+                        //     title: searchValue
+                        // }}
                     ]
                 },
-                populate: ['products_categories']
+                // populate: ['products_categories']
             });
 
 
@@ -92,17 +92,46 @@ module.exports = createCoreController('api::product.product', ({ strapi }) => ({
 
                 }
             });
+            
 
             
             if (!updatedUser) {
                 ctx.throw(400, 'Failed to update user');
             }
             
-            ctx.send({ message: 'Product updated in wishlist successfully', wishlist1 });
+            ctx.send({ message: 'Product updated in wishlist successfully' });
         } catch (error) {
             ctx.throw(400, 'Failed to append product to user\'s wishlist', error);
         }
 
+    },
+
+    async wishlistItems(ctx){
+        try{
+            let tokendata;
+
+            try {
+                tokendata = await strapi.plugins['users-permissions'].services.jwt.getToken(ctx);
+            } catch (err) {
+                return handleErrors(ctx, err, 'unauthorized');
+            }
+            if (!tokendata) {
+                ctx.throw(401, 'No token provided');
+            }
+
+            const userInfo = await strapi.query('api::user-info.user-info').findOne({ where: { id: tokendata.userId }, populate: ['wishlist'], });
+            if(!userInfo){
+                ctx.throw("No user found", 400);
+            }
+                      
+            let wishlist1 = userInfo.wishlist;
+
+                        
+            ctx.send(wishlist1);
+
+        }catch(error){
+            ctx.throw(400, 'Failed to get the wishlist', error);
+        }
     },
     async compareProducts(ctx) {
         try {

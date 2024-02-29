@@ -47,6 +47,9 @@
       "relation": "manyToMany",
       "target": "api::cart.cart",
       "mappedBy": "user_infos"
+    },
+    "registered": {
+      "type": "boolean"
     }
   }
 }
