@@ -42,7 +42,7 @@ module.exports = createCoreController('api::product.product', ({ strapi }) => ({
         try {
 
             const { action, productId } = ctx.request.body;
-            if(!action||!productId){
+            if (!action || !productId) {
                 ctx.throw('Action or productId missing', 400);
             }
 
@@ -58,18 +58,18 @@ module.exports = createCoreController('api::product.product', ({ strapi }) => ({
             }
 
             const userInfo = await strapi.query('api::user-info.user-info').findOne({ where: { id: tokendata.userId }, populate: ['wishlist'], });
-            if(!userInfo){
+            if (!userInfo) {
                 ctx.throw("No user found", 400);
             }
-                      
+
             let wishlist1 = userInfo.wishlist;
-            
+
 
             if (action === 'unlike') {
 
                 // Remove the product from the wishlist
                 wishlist1 = wishlist1.filter(product => product.id !== productId);
-                
+
             } else if (action === 'like') {
 
                 // Add the product to the wishlist
@@ -80,9 +80,9 @@ module.exports = createCoreController('api::product.product', ({ strapi }) => ({
                 wishlist1.push(product);
             }
 
-            
+
             const wishlistids = wishlist1.map(product => product.id);
-            
+
             const updatedUser = await strapi.query('api::user-info.user-info').update({
                 where: { id: userInfo.id },
                 // data:{ wishlist:wishlist1},
@@ -92,13 +92,13 @@ module.exports = createCoreController('api::product.product', ({ strapi }) => ({
 
                 }
             });
-            
 
-            
+
+
             if (!updatedUser) {
                 ctx.throw(400, 'Failed to update user');
             }
-            
+
             ctx.send({ message: 'Product updated in wishlist successfully' });
         } catch (error) {
             ctx.throw(400, 'Failed to append product to user\'s wishlist', error);
@@ -106,8 +106,9 @@ module.exports = createCoreController('api::product.product', ({ strapi }) => ({
 
     },
 
-    async wishlistItems(ctx){
-        try{
+    async wishlistItems(ctx) {
+        console.log("----------------------------WISHLIST API-----------------------");
+        try {
             let tokendata;
 
             try {
@@ -120,16 +121,16 @@ module.exports = createCoreController('api::product.product', ({ strapi }) => ({
             }
 
             const userInfo = await strapi.query('api::user-info.user-info').findOne({ where: { id: tokendata.userId }, populate: ['wishlist'], });
-            if(!userInfo){
+            if (!userInfo) {
                 ctx.throw("No user found", 400);
             }
-                      
+
             let wishlist1 = userInfo.wishlist;
 
-                        
+
             ctx.send(wishlist1);
 
-        }catch(error){
+        } catch (error) {
             ctx.throw(400, 'Failed to get the wishlist', error);
         }
     },
